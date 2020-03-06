@@ -1,0 +1,10 @@
+steps:
+  - name: 'gcr.io/$PROJECT_ID/airflow'
+    id: Integration Test
+    entrypoint: python
+    env:
+      - AIRFLOW__CORE__DAGS_FOLDER=/workspace/dags
+    args: 
+    - -m
+    - unittest
+    - tests/Integration_Test.py

@@ -1,0 +1,11 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build','-t', 'gcr.io/$PROJECT_ID/airflow:${_AIRFLOW_VERSION}',
+          '-t','gcr.io/$PROJECT_ID/airflow',
+          '--build-arg','AIRFLOW_VERSION=${_AIRFLOW_VERSION}','.']
+substitutions:
+  _AIRFLOW_VERSION: 1.10.6
+
+images:
+  - 'gcr.io/$PROJECT_ID/airflow:latest'
+  - 'gcr.io/$PROJECT_ID/airflow:$_AIRFLOW_VERSION'  
