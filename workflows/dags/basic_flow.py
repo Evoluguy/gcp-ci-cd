@@ -2,6 +2,7 @@ from datetime import timedelta
 import airflow
 from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
+from airflow.operators.bigquery_operator import BigQueryOperator
 
 default_args={
     'owner': 'airflow',
@@ -20,13 +21,15 @@ dag = DAG('basic_dag',
         schedule_interval=timedelta(days=1)
         )
 
-task1 = BashOperator(task_id='print_date',
-                    bash_command='date',
+
+display_msg = BashOperator(task_id='print_msg',
+                    bash_command='echo "Hello world, Connecting Bigquery..............."' ,
                     dag=dag)
 
-task2 = BashOperator(task_id='print_msg',
-                    bash_command='echo "Hello world from task2"' ,
-                    dag=dag)
-
-task1.set_downstream(task2)
+run_bigquery = BigQueryOperator(
+    task_id='get_sample_data',
+    sql='sql/get_sample_data.sql',
+    use_legacy_sql=False
+)
+display_msg.set_downstream(run_bigquery)
 
